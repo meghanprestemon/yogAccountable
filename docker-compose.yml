@@ -12,11 +12,18 @@ services:
     depends_on:
       - postgres
     environment:
-      - NODE_ENV=dev
+      - NODE_ENV=$NODE_ENV
 
   postgres:
     image: postgres:9.6.2-alpine
     environment:
       POSTGRES_DB: yogaccountable
+      POSTGRES_USER: yogaccountable
+      POSTGRES_PASSWORD: yoga
+
+  postgres_test:
+    image: postgres:9.6.2-alpine
+    environment:
+      POSTGRES_DB: yogaccountable_test
       POSTGRES_USER: yogaccountable
       POSTGRES_PASSWORD: yoga

@@ -31,5 +31,5 @@ exports.seed = knex => knex('users').del()
       created_at: new Date('2016-06-29 14:26:16 UTC'),
       updated_at: new Date('2016-06-29 14:26:16 UTC'),
     },
-  ]));
+  ]))
   .then(() => knex.raw('SELECT setval(\'users_id_seq\', (SELECT MAX(id) FROM users))'));

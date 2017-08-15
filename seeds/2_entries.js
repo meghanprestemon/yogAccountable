@@ -28,5 +28,5 @@ exports.seed = knex => knex('entries').del()
       duration: '01:15:00',
       comments: 'focus on alignment and tree pose',
     },
-  ]));
+  ]))
   .then(() => knex.raw('SELECT setval(\'entries_id_seq\', (SELECT MAX(id) FROM entries))'));
