@@ -4,7 +4,8 @@ module.exports = {
     client: 'postgresql',
     connection: {
       database: 'yogaccountable_test',
-      user: 'postgres',
+      user: 'yogaccountable',
+      password: 'yoga',
       host: 'postgres',
     },
   },
@@ -12,7 +13,7 @@ module.exports = {
   dev: {
     client: 'postgresql',
     connection: {
-      database: 'postgres',
+      database: 'yogaccountable',
       user: 'yogaccountable',
       password: 'yoga',
       host: 'postgres',

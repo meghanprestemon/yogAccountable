@@ -9,10 +9,13 @@
     "knex": "0.13.0",
     "pg": "7.1.2"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "nodemon": "1.11.0"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "knex": "knex"
+    "knex": "knex",
+    "start": "nodemon index.js"
   },
   "keywords": [],
   "author": "",
