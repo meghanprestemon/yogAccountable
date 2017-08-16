@@ -1,14 +1,9 @@
 const express = require('express');
 const bodyParser = require("body-parser");
-const jwt = require('jsonwebtoken');
-const passport = require("passport");
 
 const app = express();
-const passportJWT = require("passport-jwt");
 
-const ExtractJwt = passportJWT.ExtractJwt;
-const JwtStrategy = passportJWT.Strategy;
-
+app.use(bodyParser.json());
 
 const entries = require('./routes/entries');
 const users = require('./routes/users');
