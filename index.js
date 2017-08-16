@@ -8,8 +8,8 @@ app.use(bodyParser.json());
 const entries = require('./routes/entries');
 const users = require('./routes/users');
 
-app.use('/entries', entries);
-app.use('/users', users);
+// app.use('/entries', entries);
+// app.use('/users', users);
 
 const port = process.env.PORT || 8000;
 

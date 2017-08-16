@@ -6,7 +6,7 @@ module.exports = {
       database: 'yogaccountable_test',
       user: 'yogaccountable',
       password: 'yoga',
-      host: 'postgres',
+      host: 'postgres_test',
     },
   },
 
