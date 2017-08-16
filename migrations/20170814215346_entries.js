@@ -10,7 +10,9 @@ exports.up = function(knex) {
     table.date('date').notNullable();
     table.string('location', 200).notNullable();
     table.string('yoga_type', 200).notNullable();
-    table.specificType('duration', 'interval').notNullable();
+    table.time('start_time');
+    table.time('end_time');
+    table.specificType('duration', 'interval');
     table.text('comments').notNullable().defaultTo('');
   });
 };
