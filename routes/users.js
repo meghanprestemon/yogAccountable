@@ -6,8 +6,6 @@ const { camelizeKeys, decamelizeKeys } = require('humps');
 const router = express.Router();
 const userRepo = new UserRepository();
 
-const saltRounds = 10;
-
 //NOTE do i need this? don't the first 2 steps of the /login route take care of this?
         // i.e. !userData and !success
 
@@ -15,11 +13,11 @@ const saltRounds = 10;
 //   let username = req.body.username;
 //   let password = req.body.password;
 //
-//   if (email && password) {
+//   if (username && password) {
 //     next();
 //     return;
-//   } else if (!email) {
-//     res.status(400).send({field: 'email', error: 'undefined'});
+//   } else if (!username) {
+//     res.status(400).send({field: 'username', error: 'undefined'});
 //   } else if (!password) {
 //     res.status(400).send({field: 'password', error: 'undefined'});
 //   } else {
@@ -27,6 +25,8 @@ const saltRounds = 10;
 //   }
 // }
 
+//NOTE are the route labeled correctly?
+      // i.e. '/login' and '/register'
 router.post('/login', verifyLoginCredentials, (req, res) => {
   let username = req.body.username;
   let password = req.body.password;
@@ -35,8 +35,7 @@ router.post('/login', verifyLoginCredentials, (req, res) => {
   userRepo.getUserData(username)
     .then(userData => {
       if(!userData) {
-        res.header('Content-Type', 'text/plain');
-        return res.status(400).send({field: 'login', error: 'not found'});
+        throw new Error('UNSUCCESSFUL_LOGIN');
       }
       userId = userData.id;
       return bcrypt.compare(password, userData.password);
@@ -49,7 +48,11 @@ router.post('/login', verifyLoginCredentials, (req, res) => {
         iss: 'yogAccountable',
         sub: {
           id: userId
-        }
+        },
+
+        //NOTE do I need to set an expiration?*******
+
+        exp: Math.floor(Date.now() / 1000) + (60 * 60),
       };
       const token = jwt.sign(jwtPayload, process.env.JWT_KEY);
       res.cookie('token', token, {httpOnly: true}).status(200).send({login: 'success'})
@@ -57,6 +60,35 @@ router.post('/login', verifyLoginCredentials, (req, res) => {
     .catch(err => {
       if (err.message === 'UNSUCCESSFUL_LOGIN') {
         res.status(400).send({field: 'login', error: 'not found'});
+        return;
+      }
+      res.setHeader('Content-Type', 'application/json');
+      res.status(500).send(err);
+    });
+});
+
+router.post('/register', (req, res) => {
+  userRepo.verifyUniqueEmail(req.body.email)
+    .then(userData => {
+      if (userData) {
+        throw new Error('EMAIL_ALREADY_EXISTS')
+      } else if (verifyUniqueUsername(req.body.username)) {
+        throw new Error('USERNAME_ALREADY_EXISTS')
+      }
+      return bcrypt.hash(req.body.password, 12)
+    })
+    .then(password => {
+      return userRepo.registerUser(humps.decamelizeKeys(req.body), password);
+    })
+    .then(newUserId => {
+      res.status(200).send({register: 'success', newUser: newUserId})
+    })
+    .catch(err => {
+      if (err.message === 'EMAIL_ALREADY_EXISTS') {
+        res.status(400).send({field: 'register', error: 'email already exists'});
+        return;
+      } else if (err.message === 'USERNAME_ALREADY_EXISTS') {
+        res.status(400).send({field: 'register', error: 'username already exists'});
         return;
       }
       res.setHeader('Content-Type', 'application/json');
