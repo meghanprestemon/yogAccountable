@@ -26,7 +26,7 @@ class UserRepository {
         last_name: body.last_name,
         username: body.username,
         email: body.email,
-        password: password
+        password
       }, 'id');
   }
 }

@@ -46,7 +46,23 @@ router.get('/', checkForToken, verifyUser, (req, res) => {
       res.setHeader('Content-Type', 'application/json');
       res.status(500).send(err);
     });
-})
+});
+
+router.post('/', checkForToken, verifyUser, (req, res) => {
+  let userId = getUserId(req);
+  if (!userId) {
+    return res.status(401).send('Unauthorized')
+  }
+
+  entriesRepo.createEntry(userId, decamelizeKeys(req.body))
+    .then(entries => {
+      res.status(200).send(camelizeKeys(entries[0]))
+    })
+    .catch(err => {
+      res.setHeader('Content-Type', 'application/json');
+      res.status(500).send(err);
+    });
+});
 
 
 
