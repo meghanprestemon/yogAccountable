@@ -1,9 +1,9 @@
-// const express = require('express');
-// const knex = require('../knex');
-//
-// const EntriesRepository = require('../repositories/entries_repo');
-// const entriesRepo = new EntriesRepository();
-//
-// const router = express.Router();
-//
-// router.get('/', )
+const express = require('express');
+const knex = require('../knex');
+
+class EntriesRepository {
+  getAllEntries(userId) {
+    return knex('entries')
+      .where('user_id', userId)
+  }
+}
