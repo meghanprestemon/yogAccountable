@@ -1,6 +1,7 @@
 const assert = require('chai').assert;
 const { suite, test } = require('mocha');
 const knex = require('../knex');
+const parse = require('postgres-interval')
 const { addDatabaseHooks } = require('./utils');
 
 suite('seeds', addDatabaseHooks(() => {
@@ -67,9 +68,7 @@ suite('seeds', addDatabaseHooks(() => {
             yoga_type: 'vinyasa',
             start_time: '13:00:00',
             end_time: '13:30:00',
-            duration: PostgresInterval {
-              'minutes': 30
-            },
+            duration: parse('00:30:00'),
             comments: 'What a hard workout! Focus on core',
           },
           {
@@ -80,10 +79,7 @@ suite('seeds', addDatabaseHooks(() => {
             yoga_type: 'vinyasa',
             start_time: '12:00:00',
             end_time: '13:30:00',
-            duration: PostgresInterval {
-              'hours': 1,
-              'minutes': 30
-            },
+            duration: parse('01:30:00'),
             comments: 'Satori Yoga Studio - long class working toward astavakrasana',
           },
           {
@@ -94,10 +90,7 @@ suite('seeds', addDatabaseHooks(() => {
             yoga_type: 'hatha',
             start_time: '12:00:00',
             end_time: '13:15:00',
-            duration: PostgresInterval {
-              'hours': 1,
-              'minutes': 15
-            },
+            duration: parse('01:15:00'),
             comments: 'focus on alignment and tree pose',
           },
         ];
