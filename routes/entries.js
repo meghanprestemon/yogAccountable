@@ -54,31 +54,29 @@ router.post('/', verifyToken, (req, res) => {
     });
 });
 
-//NOTE: if i pass the id in through the body, how do i specify that this path is different from post NEW entry?
-      // also, how would I handle deleting multiple entries at once?
-// router.post('/:id', verifyToken, (req, res) => {
-//   let userId = getUserId(req);
-//   if (!userId) {
-//     return res.status(401).send('Unauthorized')
-//   }
-//
-//   entriesRepo.updateEntry(userId, decamelizeKeys(req.body))
-//     .then(entries => {
-//       res.status(200).send(camelizeKeys(entries[0]))
-//     })
-//     .catch(err => {
-//       res.setHeader('Content-Type', 'application/json');
-//       res.status(500).send(err);
-//     });
-// });
+router.post('/:id', verifyToken, (req, res) => {
+  let userId = getUserId(req);
+  if (!userId) {
+    return res.status(401).send('Unauthorized')
+  }
 
-router.delete('/', verifyToken, (req, res) => {
+  entriesRepo.updateEntry(userId, decamelizeKeys(req.body))
+    .then(entries => {
+      res.status(200).send(camelizeKeys(entries[0]))
+    })
+    .catch(err => {
+      res.setHeader('Content-Type', 'application/json');
+      res.status(500).send(err);
+    });
+});
+
+router.delete('/:id', verifyToken, (req, res) => {
   let userId = getUserId(req);
   if (!userId) {
     return res.status(401).send({field: 'userId', error: 'unauthorized'});
   }
 
-  entriesRepo.deleteEntry(req.body.entryId, userId)
+  entriesRepo.deleteEntry(req.params.id, userId)
     .then(id => {
       res.status(200).send({action: 'deleted', id: id[0]});
     })

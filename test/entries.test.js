@@ -104,13 +104,12 @@ suite('entries routes', addDatabaseHooks(() => {
         }, done);
     });
 
-    test('DELETE /entries', (done) => {
+    test('DELETE /entries/:id', (done) => {
       agent
-        .delete('/entries')
+        .delete('/entries/2')
         .set('Cookie', cookie)
         .set('Accept', 'application/json')
         .set('Content-Type', 'application/json')
-        .send({ entryId: 2 })
         .expect('Content-Type', /json/)
         .expect((res) => {
           delete res.body.createdAt;
@@ -147,9 +146,9 @@ suite('entries routes', addDatabaseHooks(() => {
         .expect(401, {field: 'token', error: 'unauthorized'}, done);
     });
 
-    test('DELETE /entries', (done) => {
+    test('DELETE /entries/:id', (done) => {
       request(server)
-        .del('/entries')
+        .del('/entries/:id')
         .set('Accept', 'application/json')
         .set('Content-Type', 'application/json')
         .send({ entryId: 1 })
