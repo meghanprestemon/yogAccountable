@@ -1,38 +1,37 @@
-const express = require('express');
 const knex = require('../knex');
 
 class EntriesRepository {
-  getAllEntries(user_id) {
+  static getAllEntries(userId) {
     return knex('entries')
-      .where({ user_id })
-      .orderBy('date', 'ASC')
+      .where({ user_id: userId })
+      .orderBy('date', 'ASC');
   }
 
-  createEntry(user_id, entryData) {
+  static createEntry(userId, entryData) {
     return knex('entries')
       .insert({
-        user_id,
+        user_id: userId,
         date: entryData.date,
         location: entryData.location,
         yoga_type: entryData.yoga_type,
         start_time: entryData.start_time,
         end_time: entryData.end_time,
         duration: entryData.duration,
-        comments: entryData.comments
-      }, '*')
+        comments: entryData.comments,
+      }, '*');
   }
 
-  updateEntry(id, user_id, entryData) {
+  static updateEntry(id, userId, entryData) {
     return knex('entries')
-      .where({ id, user_id })
-      .update(entryData, '*')
+      .where({ id, user_id: userId })
+      .update(entryData, '*');
   }
 
-  deleteEntry(id, user_id) {
+  static deleteEntry(id, userId) {
     return knex('entries')
-      .where({ id, user_id })
+      .where({ id, user_id: userId })
       .del()
-      .returning('id')
+      .returning('id');
   }
 }
 

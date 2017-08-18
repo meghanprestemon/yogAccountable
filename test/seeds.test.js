@@ -1,7 +1,7 @@
 const assert = require('chai').assert;
 const { suite, test } = require('mocha');
 const knex = require('../knex');
-const parse = require('postgres-interval')
+const parse = require('postgres-interval');
 const { addDatabaseHooks } = require('./utils');
 
 suite('seeds', addDatabaseHooks(() => {
@@ -99,7 +99,7 @@ suite('seeds', addDatabaseHooks(() => {
           assert.deepEqual(
             actual[i],
             expected[i],
-            `Row id=${i + 1} not the same`
+            `Row id=${i + 1} not the same`,
           );
         });
 

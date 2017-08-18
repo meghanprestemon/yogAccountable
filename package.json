@@ -17,14 +17,18 @@
   },
   "devDependencies": {
     "chai": "4.1.1",
+    "eslint": "4.4.1",
+    "eslint-config-airbnb-base": "11.3.1",
+    "eslint-plugin-import": "2.7.0",
     "mocha": "3.5.0",
     "nodemon": "1.11.0",
     "supertest": "3.0.0"
   },
   "scripts": {
+    "start": "sh ./scripts/start",
     "test": "mocha",
-    "knex": "knex",
-    "start": "sh ./scripts/start"
+    "lint": "NODE_ENV=dev docker-compose run api ./node_modules/.bin/eslint --fix .",
+    "knex": "knex"
   },
   "keywords": [],
   "author": "",

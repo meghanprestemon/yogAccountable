@@ -1,10 +1,11 @@
+/* eslint-disable no-undef, consistent-return */
+
 process.env.NODE_ENV = 'test';
 
 const { suite, test } = require('mocha');
 const request = require('supertest');
-const knex = require('../knex');
 const server = require('../index');
-const { addDatabaseHooks } = require('./utils')
+const { addDatabaseHooks } = require('./utils');
 
 suite('entries routes', addDatabaseHooks(() => {
   suite('with token', addDatabaseHooks(() => {
@@ -18,7 +19,7 @@ suite('entries routes', addDatabaseHooks(() => {
         .set('Content-Type', 'application/json')
         .send({
           username: 'meghanprestemon',
-          password: 'youreawizard'
+          password: 'youreawizard',
         })
         .end((err, res) => {
           if (err) {
@@ -46,7 +47,7 @@ suite('entries routes', addDatabaseHooks(() => {
             startTime: '13:00:00',
             endTime: '13:30:00',
             duration: {
-              'minutes': 30
+              minutes: 30,
             },
             comments: 'What a hard workout! Focus on core',
           },
@@ -59,13 +60,12 @@ suite('entries routes', addDatabaseHooks(() => {
             startTime: '12:00:00',
             endTime: '13:30:00',
             duration: {
-              'hours': 1,
-              'minutes': 30
+              hours: 1,
+              minutes: 30,
             },
             comments: 'Satori Yoga Studio - long class working toward astavakrasana',
-          }
+          },
         ], done);
-
     });
 
     test('POST /entries', (done) => {
@@ -97,8 +97,8 @@ suite('entries routes', addDatabaseHooks(() => {
           startTime: '13:00:00',
           endTime: '14:30:00',
           duration: {
-            'hours': 1,
-            'minutes': 30
+            hours: 1,
+            minutes: 30,
           },
           comments: 'Focus on bhujapidasana',
         }, done);
@@ -119,17 +119,17 @@ suite('entries routes', addDatabaseHooks(() => {
           delete res.body.updatedAt;
         })
         .expect(200, {
-            id: 1,
-            userId: 1,
-            date: '2017-06-28T00:00:00.000Z',
-            location: 'home',
-            yogaType: 'hatha',
-            startTime: '13:00:00',
-            endTime: '13:30:00',
-            duration: {
-              'minutes': 30
-            },
-            comments: 'stretching and alignment',
+          id: 1,
+          userId: 1,
+          date: '2017-06-28T00:00:00.000Z',
+          location: 'home',
+          yogaType: 'hatha',
+          startTime: '13:00:00',
+          endTime: '13:30:00',
+          duration: {
+            minutes: 30,
+          },
+          comments: 'stretching and alignment',
         }, done);
     });
 
@@ -144,7 +144,7 @@ suite('entries routes', addDatabaseHooks(() => {
           delete res.body.createdAt;
           delete res.body.updatedAt;
         })
-        .expect(200, {action: 'deleted', id: 2}, done);
+        .expect(200, { action: 'deleted', id: 2 }, done);
     });
   }));
 
@@ -154,7 +154,7 @@ suite('entries routes', addDatabaseHooks(() => {
         .get('/entries')
         .set('Accept', 'application/json')
         .expect('Content-Type', /json/)
-        .expect(401, {field: 'token', error: 'unauthorized'}, done);
+        .expect(401, { field: 'token', error: 'unauthorized' }, done);
     });
 
     test('POST /entries', (done) => {
@@ -172,7 +172,7 @@ suite('entries routes', addDatabaseHooks(() => {
           comments: 'more stretching',
         })
         .expect('Content-Type', /json/)
-        .expect(401, {field: 'token', error: 'unauthorized'}, done);
+        .expect(401, { field: 'token', error: 'unauthorized' }, done);
     });
 
     test('POST /entries/:id', (done) => {
@@ -184,7 +184,7 @@ suite('entries routes', addDatabaseHooks(() => {
           comments: 'primary series',
         })
         .expect('Content-Type', /json/)
-        .expect(401, {field: 'token', error: 'unauthorized'}, done);
+        .expect(401, { field: 'token', error: 'unauthorized' }, done);
     });
 
     test('DELETE /entries/:id', (done) => {
@@ -194,7 +194,7 @@ suite('entries routes', addDatabaseHooks(() => {
         .set('Content-Type', 'application/json')
         .send({ entryId: 1 })
         .expect('Content-Type', /json/)
-        .expect(401, {field: 'token', error: 'unauthorized'}, done);
+        .expect(401, { field: 'token', error: 'unauthorized' }, done);
     });
   }));
 }));

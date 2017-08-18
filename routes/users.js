@@ -5,54 +5,52 @@ const UserRepository = require('../repositories/users_repo');
 const { decamelizeKeys } = require('humps');
 
 const router = express.Router();
-const userRepo = new UserRepository();
 
 function verifyLoginCredentials(req, res, next) {
-  let username = req.body.username;
-  let password = req.body.password;
+  const username = req.body.username;
+  const password = req.body.password;
 
   if (username && password) {
     next();
-    return;
   } else if (!username) {
-    res.status(400).send({field: 'username', error: 'undefined'});
+    res.status(400).send({ field: 'username', error: 'undefined' });
   } else if (!password) {
-    res.status(400).send({field: 'password', error: 'undefined'});
+    res.status(400).send({ field: 'password', error: 'undefined' });
   } else {
-    res.status(400).send({field: 'unspecified', error: 'unspecified'});
+    res.status(400).send({ field: 'unspecified', error: 'unspecified' });
   }
 }
 
 router.post('/login', verifyLoginCredentials, (req, res) => {
-  let username = req.body.username;
-  let password = req.body.password;
+  const username = req.body.username;
+  const password = req.body.password;
   let userId;
 
-  userRepo.getUserData(username)
-    .then(userData => {
-      if(!userData) {
+  UserRepository.getUserData(username)
+    .then((userData) => {
+      if (!userData) {
         throw new Error('UNSUCCESSFUL_LOGIN');
       }
       userId = userData.id;
       return bcrypt.compare(password, userData.password);
     })
-    .then(success => {
+    .then((success) => {
       if (!success) {
         throw new Error('UNSUCCESSFUL_LOGIN');
       }
       const jwtPayload = {
         iss: 'yogAccountable',
         sub: {
-          id: userId
+          id: userId,
         },
         exp: Math.floor(Date.now() / 1000) + (60 * 60),
       };
       const token = jwt.sign(jwtPayload, process.env.JWT_KEY);
-      res.cookie('token', token, {httpOnly: true}).status(200).send(true)
+      res.cookie('token', token, { httpOnly: true }).status(200).send(true);
     })
-    .catch(err => {
+    .catch((err) => {
       if (err.message === 'UNSUCCESSFUL_LOGIN') {
-        res.status(400).send({field: 'login', error: 'not found'});
+        res.status(400).send({ field: 'login', error: 'not found' });
         return;
       }
       res.setHeader('Content-Type', 'application/json');
@@ -61,31 +59,29 @@ router.post('/login', verifyLoginCredentials, (req, res) => {
 });
 
 router.post('/register', (req, res) => {
-  userRepo.verifyUniqueEmail(req.body.email)
-    .then(userData => {
+  UserRepository.verifyUniqueEmail(req.body.email)
+    .then((userData) => {
       if (userData) {
-        throw new Error('EMAIL_ALREADY_EXISTS')
+        throw new Error('EMAIL_ALREADY_EXISTS');
       }
-      return userRepo.verifyUniqueUsername(req.body.username)
+      return UserRepository.verifyUniqueUsername(req.body.username);
     })
-    .then(userData => {
+    .then((userData) => {
       if (userData) {
-        throw new Error('USERNAME_ALREADY_EXISTS')
+        throw new Error('USERNAME_ALREADY_EXISTS');
       }
-      return bcrypt.hash(req.body.password, 12)
+      return bcrypt.hash(req.body.password, 12);
     })
-    .then(password => {
-      return userRepo.registerUser(decamelizeKeys(req.body), password);
+    .then(password => UserRepository.registerUser(decamelizeKeys(req.body), password))
+    .then((newUserId) => {
+      res.status(200).send({ register: true, newUser: newUserId[0] });
     })
-    .then(newUserId => {
-      res.status(200).send({register: true, newUser: newUserId[0]})
-    })
-    .catch(err => {
+    .catch((err) => {
       if (err.message === 'EMAIL_ALREADY_EXISTS') {
-        res.status(400).send({field: 'register', error: 'email already exists'});
+        res.status(400).send({ field: 'register', error: 'email already exists' });
         return;
       } else if (err.message === 'USERNAME_ALREADY_EXISTS') {
-        res.status(400).send({field: 'register', error: 'username already exists'});
+        res.status(400).send({ field: 'register', error: 'username already exists' });
         return;
       }
       res.setHeader('Content-Type', 'application/json');

@@ -1,3 +1,5 @@
+/* eslint-disable no-param-reassign, consistent-return */
+
 process.env.NODE_ENV = 'test';
 
 const assert = require('chai').assert;
@@ -17,7 +19,7 @@ suite('users routes', addDatabaseHooks(() => {
         .set('Content-Type', 'application/json')
         .send({
           username: 'meghanprestemon',
-          password: 'youreawizard'
+          password: 'youreawizard',
         })
         .expect('set-cookie', /token=[a-zA-Z0-9\-_]+\.[a-zA-Z0-9\-_]+\.[a-zA-Z0-9\-_]+; Path=\/;.+HttpOnly/)
         .expect((res) => {
@@ -30,30 +32,30 @@ suite('users routes', addDatabaseHooks(() => {
     });
 
     test('POST /login with no username', (done) => {
-    request(server)
-      .post('/users/login')
-      .set('Accept', 'application/json')
-      .set('Content-Type', 'application/json')
-      .send({
-        password: 'youreawizard'
-      })
-      .expect(400, {field: 'username', error: 'undefined'})
-      .expect('Content-Type', /json/)
-      .end(done);
-  });
+      request(server)
+        .post('/users/login')
+        .set('Accept', 'application/json')
+        .set('Content-Type', 'application/json')
+        .send({
+          password: 'youreawizard',
+        })
+        .expect(400, { field: 'username', error: 'undefined' })
+        .expect('Content-Type', /json/)
+        .end(done);
+    });
 
-  test('POST /login with no password', (done) => {
-    request(server)
-      .post('/users/login')
-      .set('Accept', 'application/json')
-      .set('Content-Type', 'application/json')
-      .send({
-        username: 'meghanprestemon'
-      })
-      .expect(400, {field: 'password', error: 'undefined'})
-      .expect('Content-Type', /json/)
-      .end(done);
-  });
+    test('POST /login with no password', (done) => {
+      request(server)
+        .post('/users/login')
+        .set('Accept', 'application/json')
+        .set('Content-Type', 'application/json')
+        .send({
+          username: 'meghanprestemon',
+        })
+        .expect(400, { field: 'password', error: 'undefined' })
+        .expect('Content-Type', /json/)
+        .end(done);
+    });
 
     test('POST /login with incorrect username', (done) => {
       request(server)
@@ -62,9 +64,9 @@ suite('users routes', addDatabaseHooks(() => {
         .set('Content-Type', 'application/json')
         .send({
           username: 'notARealUsername',
-          password: 'youreawizard'
+          password: 'youreawizard',
         })
-        .expect(400, {field: 'login', error: 'not found'})
+        .expect(400, { field: 'login', error: 'not found' })
         .expect('Content-Type', /json/)
         .end(done);
     });
@@ -76,9 +78,9 @@ suite('users routes', addDatabaseHooks(() => {
         .set('Content-Type', 'application/json')
         .send({
           username: 'meghanprestemon',
-          password: 'badpassword'
+          password: 'badpassword',
         })
-        .expect(400, {field: 'login', error: 'not found'})
+        .expect(400, { field: 'login', error: 'not found' })
         .expect('Content-Type', /json/)
         .end(done);
     });
@@ -96,15 +98,15 @@ suite('users routes', addDatabaseHooks(() => {
           lastName: 'McTest',
           username: 'pMcTest',
           email: 'person@gmail.com',
-          password: password
+          password,
         })
         .expect((res) => {
           delete res.body.createdAt;
           delete res.body.updatedAt;
         })
-        .expect(200, {register: true, newUser: 4})
+        .expect(200, { register: true, newUser: 4 })
         .expect('Content-Type', /json/)
-        .end((httpErr, _res) => {
+        .end((httpErr) => {
           if (httpErr) {
             return done(httpErr);
           }
@@ -124,7 +126,7 @@ suite('users routes', addDatabaseHooks(() => {
                 first_name: 'Person',
                 last_name: 'McTest',
                 username: 'pMcTest',
-                email: 'person@gmail.com'
+                email: 'person@gmail.com',
               });
 
               const isMatch = bcrypt.compareSync(password, hashedPassword);
@@ -145,7 +147,7 @@ suite('users routes', addDatabaseHooks(() => {
           last_name: 'McTest',
           username: 'McTestPerson',
           email: 'person@gmail.com',
-          password: bcrypt.hashSync(password, 1)
+          password: bcrypt.hashSync(password, 1),
         })
         .then(() => {
           request(server)
@@ -157,9 +159,9 @@ suite('users routes', addDatabaseHooks(() => {
               lastName: 'McTest',
               username: 'McTestPerson',
               email: 'person@gmail.com',
-              password: password
+              password,
             })
-            .expect(400, {field: 'register', error: 'email already exists'})
+            .expect(400, { field: 'register', error: 'email already exists' })
             .expect('Content-Type', /json/)
             .end(done);
         })
@@ -175,7 +177,7 @@ suite('users routes', addDatabaseHooks(() => {
           last_name: 'McTest',
           username: 'pMcTest',
           email: 'personMcTest@gmail.com',
-          password: bcrypt.hashSync(password, 1)
+          password: bcrypt.hashSync(password, 1),
         })
         .then(() => {
           request(server)
@@ -187,9 +189,9 @@ suite('users routes', addDatabaseHooks(() => {
               lastName: 'McTest',
               username: 'pMcTest',
               email: 'newPerson@gmail.com',
-              password: password
+              password,
             })
-            .expect(400, {field: 'register', error: 'username already exists'})
+            .expect(400, { field: 'register', error: 'username already exists' })
             .expect('Content-Type', /json/)
             .end(done);
         })

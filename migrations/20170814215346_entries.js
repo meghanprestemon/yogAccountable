@@ -1,6 +1,6 @@
 
-exports.up = function(knex) {
-  return knex.schema.createTable('entries', (table) => {
+exports.up = knex =>
+  knex.schema.createTable('entries', (table) => {
     table.increments('id').primary();
     table.integer('user_id')
       .notNullable()
@@ -15,8 +15,5 @@ exports.up = function(knex) {
     table.specificType('duration', 'interval');
     table.text('comments').notNullable().defaultTo('');
   });
-};
 
-exports.down = function(knex) {
-  return knex.schema.dropTable('entries');
-};
+exports.down = knex => knex.schema.dropTable('entries');

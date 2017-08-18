@@ -1,10 +1,11 @@
 if (process.env.NODE_ENV !== 'production') {
+  /* eslint-disable global-require */
   require('dotenv').config();
 }
 
 const express = require('express');
 const bodyParser = require('body-parser');
-const cookieParser = require('cookie-parser')
+const cookieParser = require('cookie-parser');
 
 const app = express();
 
@@ -22,6 +23,7 @@ const port = process.env.PORT || 8000;
 
 app.listen(port, () => {
   if (app.get('env') !== 'test') {
+    /* eslint-disable no-console */
     console.log('Listening on port', port);
   }
 });
