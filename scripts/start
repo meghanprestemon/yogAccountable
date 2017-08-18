@@ -1,0 +1,11 @@
+#! /usr/bin/env sh
+
+if [ "$NODE_ENV" = "test" ]
+then
+   knex migrate:rollback
+   knex migrate:latest
+   knex seed:run
+   npm run test
+else
+   nodemon index.js
+fi

@@ -4,15 +4,16 @@ module.exports = {
     client: 'postgresql',
     connection: {
       database: 'yogaccountable_test',
-      user: 'postgres',
-      host: 'postgres',
+      user: 'yogaccountable',
+      password: 'yoga',
+      host: 'postgres_test',
     },
   },
 
   dev: {
     client: 'postgresql',
     connection: {
-      database: 'postgres',
+      database: 'yogaccountable',
       user: 'yogaccountable',
       password: 'yoga',
       host: 'postgres',
@@ -24,4 +25,4 @@ module.exports = {
     connection: process.env.DATABASE_URL,
   },
 
-}
+};
