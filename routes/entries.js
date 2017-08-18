@@ -20,7 +20,6 @@ function verifyToken(req, res, next){
 function getUserId(req) {
   let decodedToken = jwt.decode(req.cookies.token, {complete: true});
   return decodedToken.payload.sub.id;
-  //NOTE maybe just  `decodedToken.sub.id`
 }
 
 router.get('/', verifyToken, (req, res) => {

@@ -5,11 +5,12 @@ class EntriesRepository {
   getAllEntries(user_id) {
     return knex('entries')
       .where({ user_id })
+      .orderBy('date', 'ASC')
   }
 
   createEntry(user_id, entryData) {
     return knex('entries')
-      insert({
+      .insert({
         user_id,
         date: entryData.date,
         location: entryData.location,
@@ -18,7 +19,7 @@ class EntriesRepository {
         end_time: entryData.end_time,
         duration: entryData.duration,
         comments: entryData.comments
-      }, 'id')
+      }, '*')
   }
 
   // updateEntry() {

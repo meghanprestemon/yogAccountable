@@ -3,11 +3,14 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 const express = require('express');
-const bodyParser = require("body-parser");
+const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser')
 
 const app = express();
 
 app.use(bodyParser.json());
+app.use(cookieParser());
+app.disable('x-powered-by');
 
 const entries = require('./routes/entries');
 const users = require('./routes/users');
@@ -19,7 +22,6 @@ const port = process.env.PORT || 8000;
 
 app.listen(port, () => {
   if (app.get('env') !== 'test') {
-    /* eslint-disable no-console */
     console.log('Listening on port', port);
   }
 });

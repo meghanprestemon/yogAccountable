@@ -58,7 +58,6 @@ suite('seeds', addDatabaseHooks(() => {
   test('entries rows', (done) => {
     knex('entries').orderBy('id', 'ASC')
       .then((actual) => {
-        console.log(actual);
         const expected = [
           {
             id: 1,
@@ -68,7 +67,7 @@ suite('seeds', addDatabaseHooks(() => {
             yoga_type: 'vinyasa',
             start_time: '13:00:00',
             end_time: '13:30:00',
-            duration: {
+            duration: PostgresInterval {
               'minutes': 30
             },
             comments: 'What a hard workout! Focus on core',
@@ -81,10 +80,10 @@ suite('seeds', addDatabaseHooks(() => {
             yoga_type: 'vinyasa',
             start_time: '12:00:00',
             end_time: '13:30:00',
-            // duration: {
-            //   hours: 1,
-            //   minutes: 30
-            // },
+            duration: PostgresInterval {
+              'hours': 1,
+              'minutes': 30
+            },
             comments: 'Satori Yoga Studio - long class working toward astavakrasana',
           },
           {
@@ -95,10 +94,10 @@ suite('seeds', addDatabaseHooks(() => {
             yoga_type: 'hatha',
             start_time: '12:00:00',
             end_time: '13:15:00',
-            // duration: {
-            //   hours: 1,
-            //   minutes: 15
-            // },
+            duration: PostgresInterval {
+              'hours': 1,
+              'minutes': 15
+            },
             comments: 'focus on alignment and tree pose',
           },
         ];
@@ -107,7 +106,7 @@ suite('seeds', addDatabaseHooks(() => {
           assert.deepEqual(
             actual[i],
             expected[i],
-            `Row id=${i + 1} not the same`,
+            `Row id=${i + 1} not the same`
           );
         });
 
