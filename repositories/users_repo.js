@@ -1,9 +1,9 @@
 const knex = require('../knex');
 
 class UserRepository {
-  getUserData(email) {
+  getUserData(username) {
     return knex('users')
-      .where({ email })
+      .where({ username })
       .first();
   }
 
@@ -30,3 +30,5 @@ class UserRepository {
       }, 'id');
   }
 }
+
+module.exports = UserRepository;

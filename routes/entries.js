@@ -7,22 +7,13 @@ const { camelizeKeys, decamelizeKeys } = require('humps');
 const router = express.Router();
 const entriesRepo = new EntriesRepository();
 
-function checkForToken(req, res, next){
-  if(req.cookies.token){
-    next();
-    return;
-  }
-  res.status(401).send({field: 'token', error: 'unauthorized'});
-}
-
-//NOTE what does this do?? Find out and update send content
-function verifyUser(req, res, next){
+function verifyToken(req, res, next){
   jwt.verify(req.cookies.token, process.env.JWT_KEY, (err, decoded) => {
     if(decoded){
       next();
       return;
     }
-    res.status(401).send('Unauthorized');
+    res.status(401).send({field: 'token', error: 'unauthorized'});
   });
 }
 
@@ -32,7 +23,7 @@ function getUserId(req) {
   //NOTE maybe just  `decodedToken.sub.id`
 }
 
-router.get('/', checkForToken, verifyUser, (req, res) => {
+router.get('/', verifyToken, (req, res) => {
   let userId = getUserId(req);
   if (!userId) {
     return res.status(401).send({field: 'userId', error: 'unauthorized'});
@@ -48,15 +39,15 @@ router.get('/', checkForToken, verifyUser, (req, res) => {
     });
 });
 
-router.post('/', checkForToken, verifyUser, (req, res) => {
+router.post('/', verifyToken, (req, res) => {
   let userId = getUserId(req);
   if (!userId) {
-    return res.status(401).send('Unauthorized')
+    return res.status(401).send({field: 'userId', error: 'unauthorized'});
   }
 
   entriesRepo.createEntry(userId, decamelizeKeys(req.body))
     .then(entries => {
-      res.status(200).send(camelizeKeys(entries[0]))
+      res.status(200).send(camelizeKeys(entries[0]));
     })
     .catch(err => {
       res.setHeader('Content-Type', 'application/json');
@@ -64,6 +55,38 @@ router.post('/', checkForToken, verifyUser, (req, res) => {
     });
 });
 
+//NOTE: if i pass the id in through the body, how do i specify that this path is different from post NEW entry?
+      // also, how would I handle deleting multiple entries at once?
+// router.post('/:id', verifyToken, (req, res) => {
+//   let userId = getUserId(req);
+//   if (!userId) {
+//     return res.status(401).send('Unauthorized')
+//   }
+//
+//   entriesRepo.updateEntry(userId, decamelizeKeys(req.body))
+//     .then(entries => {
+//       res.status(200).send(camelizeKeys(entries[0]))
+//     })
+//     .catch(err => {
+//       res.setHeader('Content-Type', 'application/json');
+//       res.status(500).send(err);
+//     });
+// });
 
+router.delete('/', verifyToken, (req, res) => {
+  let userId = getUserId(req);
+  if (!userId) {
+    return res.status(401).send({field: 'userId', error: 'unauthorized'});
+  }
+
+  entriesRepo.deleteEntry(req.body.entryId, userId)
+    .then(id => {
+      res.status(200).send({action: 'deleted', id: id[0]});
+    })
+    .catch(err => {
+      res.setHeader('Content-Type', 'application/json');
+      res.status(500).send(err);
+    });
+});
 
 module.exports = router;

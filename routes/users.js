@@ -1,32 +1,28 @@
 const express = require('express');
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 const UserRepository = require('../repositories/users_repo');
 const { decamelizeKeys } = require('humps');
 
 const router = express.Router();
 const userRepo = new UserRepository();
 
-//NOTE do i need this? don't the first 2 steps of the /login route take care of this?
-        // i.e. !userData and !success
+function verifyLoginCredentials(req, res, next) {
+  let username = req.body.username;
+  let password = req.body.password;
 
-// function verifyLoginCredentials(req, res) {
-//   let username = req.body.username;
-//   let password = req.body.password;
-//
-//   if (username && password) {
-//     next();
-//     return;
-//   } else if (!username) {
-//     res.status(400).send({field: 'username', error: 'undefined'});
-//   } else if (!password) {
-//     res.status(400).send({field: 'password', error: 'undefined'});
-//   } else {
-//     res.status(400).send({field: 'unspecified', error: 'unspecified'});
-//   }
-// }
+  if (username && password) {
+    next();
+    return;
+  } else if (!username) {
+    res.status(400).send({field: 'username', error: 'undefined'});
+  } else if (!password) {
+    res.status(400).send({field: 'password', error: 'undefined'});
+  } else {
+    res.status(400).send({field: 'unspecified', error: 'unspecified'});
+  }
+}
 
-//NOTE are the route labeled correctly?
-      // i.e. '/login' and '/register'
 router.post('/login', verifyLoginCredentials, (req, res) => {
   let username = req.body.username;
   let password = req.body.password;
@@ -49,13 +45,10 @@ router.post('/login', verifyLoginCredentials, (req, res) => {
         sub: {
           id: userId
         },
-
-        //NOTE do I need to set an expiration?*******
-
         exp: Math.floor(Date.now() / 1000) + (60 * 60),
       };
       const token = jwt.sign(jwtPayload, process.env.JWT_KEY);
-      res.cookie('token', token, {httpOnly: true}).status(200).send({login: 'success'})
+      res.cookie('token', token, {httpOnly: true}).status(200).send(true)
     })
     .catch(err => {
       if (err.message === 'UNSUCCESSFUL_LOGIN') {
@@ -72,16 +65,20 @@ router.post('/register', (req, res) => {
     .then(userData => {
       if (userData) {
         throw new Error('EMAIL_ALREADY_EXISTS')
-      } else if (verifyUniqueUsername(req.body.username)) {
+      }
+      return userRepo.verifyUniqueUsername(req.body.username)
+    })
+    .then(userData => {
+      if (userData) {
         throw new Error('USERNAME_ALREADY_EXISTS')
       }
       return bcrypt.hash(req.body.password, 12)
     })
     .then(password => {
-      return userRepo.registerUser(humps.decamelizeKeys(req.body), password);
+      return userRepo.registerUser(decamelizeKeys(req.body), password);
     })
     .then(newUserId => {
-      res.status(200).send({register: 'success', newUser: newUserId})
+      res.status(200).send({register: true, newUser: newUserId[0]})
     })
     .catch(err => {
       if (err.message === 'EMAIL_ALREADY_EXISTS') {

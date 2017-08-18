@@ -7,7 +7,7 @@ exports.seed = knex => knex('users').del()
       last_name: 'Prestemon',
       username: 'meghanprestemon',
       email: 'm.m.hares@gmail.com',
-      password: '$2a$12$C9AYYmcLVGYlGoO4vSZTPud9ArJwbGRsJ6TUsNULzR48z8fOnTXbS', // youreawizard
+      password: '$2a$12$Y1eSbQB7lbT7yypSZKebGOv29SQ8u6gsNkVLSBkAgu1CUVf8mY16O', // youreawizard
       created_at: new Date('2016-06-29 14:26:16 UTC'),
       updated_at: new Date('2016-06-29 14:26:16 UTC'),
     },
@@ -17,7 +17,7 @@ exports.seed = knex => knex('users').del()
       last_name: 'Jung',
       username: 'carljung',
       email: 'carljung@psych.com',
-      password: '$2a$12$C9AYYmcLVGYlGoO4vSZTPud9ArJwbGRsJ6TUsNULzR48z8fOnTXbS', // youreawizard
+      password: '$2a$12$Y1eSbQB7lbT7yypSZKebGOv29SQ8u6gsNkVLSBkAgu1CUVf8mY16O', // youreawizard
       created_at: new Date('2016-06-29 14:26:16 UTC'),
       updated_at: new Date('2016-06-29 14:26:16 UTC'),
     },
@@ -27,7 +27,7 @@ exports.seed = knex => knex('users').del()
       last_name: 'Jois',
       username: 'skpjois',
       email: 'skpjois@yogi.com',
-      password: '$2a$12$C9AYYmcLVGYlGoO4vSZTPud9ArJwbGRsJ6TUsNULzR48z8fOnTXbS', // youreawizard
+      password: '$2a$12$Y1eSbQB7lbT7yypSZKebGOv29SQ8u6gsNkVLSBkAgu1CUVf8mY16O', // youreawizard
       created_at: new Date('2016-06-29 14:26:16 UTC'),
       updated_at: new Date('2016-06-29 14:26:16 UTC'),
     },
