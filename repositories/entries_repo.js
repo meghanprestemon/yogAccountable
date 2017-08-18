@@ -22,9 +22,11 @@ class EntriesRepository {
       }, '*')
   }
 
-  // updateEntry() {
-  //
-  // }
+  updateEntry(id, user_id, entryData) {
+    return knex('entries')
+      .where({ id, user_id })
+      .update(entryData, '*')
+  }
 
   deleteEntry(id, user_id) {
     return knex('entries')

@@ -104,6 +104,35 @@ suite('entries routes', addDatabaseHooks(() => {
         }, done);
     });
 
+    test('POST /entries/:id', (done) => {
+      request(server)
+        .post('/entries/1')
+        .set('Cookie', cookie)
+        .set('Accept', 'application/json')
+        .send({
+          yogaType: 'hatha',
+          comments: 'stretching and alignment',
+        })
+        .expect('Content-Type', /json/)
+        .expect((res) => {
+          delete res.body.createdAt;
+          delete res.body.updatedAt;
+        })
+        .expect(200, {
+            id: 1,
+            userId: 1,
+            date: '2017-06-28T00:00:00.000Z',
+            location: 'home',
+            yogaType: 'hatha',
+            startTime: '13:00:00',
+            endTime: '13:30:00',
+            duration: {
+              'minutes': 30
+            },
+            comments: 'stretching and alignment',
+        }, done);
+    });
+
     test('DELETE /entries/:id', (done) => {
       agent
         .delete('/entries/2')
@@ -141,6 +170,18 @@ suite('entries routes', addDatabaseHooks(() => {
           endTime: '14:30:00',
           duration: '01:30:00',
           comments: 'more stretching',
+        })
+        .expect('Content-Type', /json/)
+        .expect(401, {field: 'token', error: 'unauthorized'}, done);
+    });
+
+    test('POST /entries/:id', (done) => {
+      request(server)
+        .post('/entries/1')
+        .set('Accept', 'application/json')
+        .send({
+          yogaType: 'ashtanga',
+          comments: 'primary series',
         })
         .expect('Content-Type', /json/)
         .expect(401, {field: 'token', error: 'unauthorized'}, done);

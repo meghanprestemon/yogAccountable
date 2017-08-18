@@ -45,8 +45,8 @@ router.post('/', verifyToken, (req, res) => {
   }
 
   entriesRepo.createEntry(userId, decamelizeKeys(req.body))
-    .then(entries => {
-      res.status(200).send(camelizeKeys(entries[0]));
+    .then(entry => {
+      res.status(200).send(camelizeKeys(entry[0]));
     })
     .catch(err => {
       res.setHeader('Content-Type', 'application/json');
@@ -57,12 +57,12 @@ router.post('/', verifyToken, (req, res) => {
 router.post('/:id', verifyToken, (req, res) => {
   let userId = getUserId(req);
   if (!userId) {
-    return res.status(401).send('Unauthorized')
+    return res.status(401).send({field: 'userId', error: 'unauthorized'})
   }
 
-  entriesRepo.updateEntry(userId, decamelizeKeys(req.body))
-    .then(entries => {
-      res.status(200).send(camelizeKeys(entries[0]))
+  entriesRepo.updateEntry(req.params.id, userId, decamelizeKeys(req.body))
+    .then(entry => {
+      res.status(200).send(camelizeKeys(entry[0]))
     })
     .catch(err => {
       res.setHeader('Content-Type', 'application/json');
