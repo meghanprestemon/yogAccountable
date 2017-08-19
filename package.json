@@ -30,7 +30,6 @@
     "lint": "NODE_ENV=dev docker-compose run api ./node_modules/.bin/eslint --fix .",
     "knex": "knex"
   },
-  "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "MIT"
 }
