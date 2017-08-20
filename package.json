@@ -30,6 +30,6 @@
     "lint": "NODE_ENV=dev docker-compose run api ./node_modules/.bin/eslint --fix .",
     "knex": "knex"
   },
-  "author": "",
+  "author": "Meghan Prestemon",
   "license": "MIT"
 }
