@@ -17,7 +17,8 @@ Ensure you have Docker installed. If you need to install it you can get started 
     ```
     JWT_KEY=xxxxxx
     ```
-    You can find more information about jwt signatures [here](https://jwt.io/introduction/) or you can use the following command to generate a `JWT_KEY`: `node -e "require('crypto').randomBytes(48, function(ex, buf) {console.log(buf.toString('hex'))});"`
+    You can find more information about jwt signatures [here](https://jwt.io/introduction/) or you can use the following command to generate a `JWT_KEY`:  
+    `node -e "require('crypto').randomBytes(48, function(ex, buf) {console.log(buf.toString('hex'))});"`
 3. Choose the environment you'd like to run:
     * **NODE_ENV=test** The test environment uses a test database that gets cleared and re-populated each time it is run. This environment automatically runs all tests when the container starts running. When the tests are complete, the container stops running.
     * **NODE_ENV=dev** The dev environment uses a separate dev database that allows data to be persisted over new container runtimes. This environment runs the `nodemon` command which keeps the container running and listening for updates to the codebase.
