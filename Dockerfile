@@ -1,4 +1,4 @@
-FROM node:8.1.2-alpine
+FROM node:8.4.0-alpine
 
 RUN apk --no-cache add --virtual builds-deps build-base python
 

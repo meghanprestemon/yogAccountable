@@ -2,13 +2,14 @@ const express = require('express');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const UserRepository = require('../repositories/users_repo');
-const { decamelizeKeys } = require('humps');
+const { camelizeKeys, decamelizeKeys } = require('humps');
 
 const router = express.Router();
 
 function verifyLoginCredentials(req, res, next) {
   const username = req.body.username;
   const password = req.body.password;
+  console.log(req.body)
 
   if (username && password) {
     next();
@@ -22,17 +23,18 @@ function verifyLoginCredentials(req, res, next) {
 }
 
 router.post('/login', verifyLoginCredentials, (req, res) => {
+  console.log('backend', req.body);
   const username = req.body.username;
   const password = req.body.password;
-  let userId;
+  let user;
 
   UserRepository.getUserData(username)
     .then((userData) => {
       if (!userData) {
         throw new Error('UNSUCCESSFUL_LOGIN');
       }
-      userId = userData.id;
-      return bcrypt.compare(password, userData.password);
+      user = camelizeKeys(userData);
+      return bcrypt.compare(password, user.password);
     })
     .then((success) => {
       if (!success) {
@@ -41,12 +43,16 @@ router.post('/login', verifyLoginCredentials, (req, res) => {
       const jwtPayload = {
         iss: 'yogAccountable',
         sub: {
-          id: userId,
+          id: user.id,
         },
         exp: Math.floor(Date.now() / 1000) + (60 * 60),
       };
       const token = jwt.sign(jwtPayload, process.env.JWT_KEY);
-      res.cookie('token', token, { httpOnly: true }).status(200).send(true);
+      res.cookie('token', token, { httpOnly: true }).status(200).send({
+        login: true,
+        userFirstName: user.firstName,
+        userId: user.id
+      });
     })
     .catch((err) => {
       if (err.message === 'UNSUCCESSFUL_LOGIN') {

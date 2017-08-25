@@ -16,6 +16,8 @@ services:
 
   postgres:
     image: postgres:9.6.2-alpine
+    volumes:
+      - ./.data:/var/lib/postgresql/data
     environment:
       POSTGRES_DB: yogaccountable
       POSTGRES_USER: yogaccountable
