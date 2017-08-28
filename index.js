@@ -10,10 +10,23 @@ const cookieParser = require('cookie-parser');
 
 const app = express();
 
-app.use(cors());
 app.use(bodyParser.json());
 app.use(cookieParser());
 app.disable('x-powered-by');
+
+var whitelist = ['http://yogaccountable.local:3003', 'localhost']
+var corsOptions = {
+  origin: function (origin, callback) {
+    if (whitelist.indexOf(origin) !== -1) {
+      callback(null, true)
+    } else {
+      callback(new Error('Not allowed by CORS'))
+    }
+  },
+  credentials: true
+}
+
+app.use(cors(corsOptions));
 
 const entries = require('./routes/entries');
 const users = require('./routes/users');

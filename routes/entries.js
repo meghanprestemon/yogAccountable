@@ -8,6 +8,7 @@ const { camelizeKeys, decamelizeKeys } = require('humps');
 const router = express.Router();
 
 function verifyToken(req, res, next) {
+  console.log('here - find cookies', req.cookies);
   jwt.verify(req.cookies.token, process.env.JWT_KEY, (err, decoded) => {
     if (decoded) {
       next();
@@ -18,11 +19,13 @@ function verifyToken(req, res, next) {
 }
 
 function getUserId(req) {
+  console.log('step 2', req.cookies);
   const decodedToken = jwt.decode(req.cookies.token, { complete: true });
   return decodedToken.payload.sub.id;
 }
 
 router.get('/', verifyToken, (req, res) => {
+  console.log('here - getting entries');
   const userId = getUserId(req);
   if (!userId) {
     return res.status(401).send({ field: 'userId', error: 'unauthorized' });

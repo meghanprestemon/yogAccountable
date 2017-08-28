@@ -9,7 +9,6 @@ const router = express.Router();
 function verifyLoginCredentials(req, res, next) {
   const username = req.body.username;
   const password = req.body.password;
-  console.log(req.body)
 
   if (username && password) {
     next();
@@ -23,7 +22,6 @@ function verifyLoginCredentials(req, res, next) {
 }
 
 router.post('/login', verifyLoginCredentials, (req, res) => {
-  console.log('backend', req.body);
   const username = req.body.username;
   const password = req.body.password;
   let user;
@@ -48,7 +46,8 @@ router.post('/login', verifyLoginCredentials, (req, res) => {
         exp: Math.floor(Date.now() / 1000) + (60 * 60),
       };
       const token = jwt.sign(jwtPayload, process.env.JWT_KEY);
-      res.cookie('token', token, { httpOnly: true }).status(200).send({
+      res.cookie('token', token);
+      res.status(200).send({
         login: true,
         userFirstName: user.firstName,
         userId: user.id
