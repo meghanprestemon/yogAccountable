@@ -22,14 +22,14 @@ suite('users routes', addDatabaseHooks(() => {
           password: 'youreawizard',
         })
         .expect('Set-Cookie', /token=[a-zA-Z0-9\-_]+\.[a-zA-Z0-9\-_]+\.[a-zA-Z0-9\-_]+; Path=\//)
-        .expect((res) =>{
+        .expect((res) => {
           delete res.body.createdAt;
           delete res.body.updatedAt;
         })
         .expect(200, {
           login: true,
           userFirstName: 'Meghan',
-          userId: 1
+          userId: 1,
         })
         .expect('Content-Type', /json/)
         .end(done);

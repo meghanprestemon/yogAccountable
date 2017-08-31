@@ -14,8 +14,8 @@ class EntriesRepository {
         date: new Date(entryData.date),
         location: entryData.location,
         yoga_type: entryData.yoga_type,
-        start_time: new Date(entryData.date + 'T' + entryData.start_time),
-        end_time: new Date(entryData.date + 'T' + entryData.end_time),
+        start_time: new Date(`${entryData.date}T${entryData.start_time}`),
+        end_time: new Date(`${entryData.date}T${entryData.end_time}`),
         duration: entryData.duration,
         comments: entryData.comments,
       }, '*');

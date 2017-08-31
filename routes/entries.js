@@ -1,4 +1,4 @@
-/* eslint-disable consistent-return */
+/* eslint-disable consistent-return, no-param-reassign */
 
 const express = require('express');
 const jwt = require('jsonwebtoken');
@@ -23,12 +23,12 @@ function getUserId(req) {
 }
 
 function formatEntryData(entriesResponse) {
-  let entryData = entriesResponse.map(entry => {
+  const entryData = entriesResponse.map((entry) => {
     entry.date = entry.date.toLocaleDateString('en-US');
-    entry.startTime = entry.startTime.toLocaleTimeString('en-US', {hour: '2-digit', minute:'2-digit'});
-    entry.endTime = entry.endTime.toLocaleTimeString('en-US', {hour: '2-digit', minute:'2-digit'});
+    entry.startTime = entry.startTime.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+    entry.endTime = entry.endTime.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
     return entry;
-  })
+  });
   return entryData;
 }
 
@@ -39,9 +39,7 @@ router.get('/', verifyToken, (req, res) => {
   }
 
   EntriesRepository.getAllEntries(userId)
-    .then((entriesResponse) => {
-      return formatEntryData(camelizeKeys(entriesResponse))
-    })
+    .then(entriesResponse => formatEntryData(camelizeKeys(entriesResponse)))
     .then((entryData) => {
       res.status(200).send(entryData);
     })

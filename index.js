@@ -15,17 +15,17 @@ app.use(cookieParser());
 app.disable('x-powered-by');
 
 if (process.env.NODE_ENV !== 'test') {
-  var whitelist = ['http://yogaccountable.local:3000', 'localhost']
-  var corsOptions = {
-    origin: function (origin, callback) {
+  const whitelist = ['http://yogaccountable.local:3000', 'localhost'];
+  const corsOptions = {
+    origin(origin, callback) {
       if (whitelist.indexOf(origin) !== -1) {
-        callback(null, true)
+        callback(null, true);
       } else {
-        callback(new Error('Not allowed by CORS'))
+        callback(new Error('Not allowed by CORS'));
       }
     },
-    credentials: true
-  }
+    credentials: true,
+  };
 
   app.use(cors(corsOptions));
 }

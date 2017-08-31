@@ -50,7 +50,7 @@ router.post('/login', verifyLoginCredentials, (req, res) => {
       res.status(200).send({
         login: true,
         userFirstName: user.firstName,
-        userId: user.id
+        userId: user.id,
       });
     })
     .catch((err) => {
