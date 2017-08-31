@@ -21,12 +21,16 @@ suite('users routes', addDatabaseHooks(() => {
           username: 'meghanprestemon',
           password: 'youreawizard',
         })
-        .expect('set-cookie', /token=[a-zA-Z0-9\-_]+\.[a-zA-Z0-9\-_]+\.[a-zA-Z0-9\-_]+; Path=\/;.+HttpOnly/)
-        .expect((res) => {
+        .expect('Set-Cookie', /token=[a-zA-Z0-9\-_]+\.[a-zA-Z0-9\-_]+\.[a-zA-Z0-9\-_]+; Path=\//)
+        .expect((res) =>{
           delete res.body.createdAt;
           delete res.body.updatedAt;
         })
-        .expect(200, 'true')
+        .expect(200, {
+          login: true,
+          userFirstName: 'Meghan',
+          userId: 1
+        })
         .expect('Content-Type', /json/)
         .end(done);
     });

@@ -10,8 +10,8 @@ exports.up = knex =>
     table.date('date').notNullable();
     table.string('location', 200).notNullable().defaultTo('');
     table.string('yoga_type', 200).notNullable().defaultTo('');
-    table.time('start_time');
-    table.time('end_time');
+    table.dateTime('start_time');
+    table.dateTime('end_time');
     table.specificType('duration', 'interval');
     table.text('comments').notNullable().defaultTo('');
   });

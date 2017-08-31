@@ -122,14 +122,14 @@ suite('migrations', addDatabaseHooks(() => {
           },
 
           start_time: {
-            type: 'time without time zone',
+            type: 'timestamp with time zone',
             maxLength: null,
             nullable: true,
             defaultValue: null,
           },
 
           end_time: {
-            type: 'time without time zone',
+            type: 'timestamp with time zone',
             maxLength: null,
             nullable: true,
             defaultValue: null,

@@ -25,7 +25,6 @@ suite('entries routes', addDatabaseHooks(() => {
           if (err) {
             return done(err);
           }
-
           cookie = res.headers['set-cookie'];
           done();
         });
@@ -41,11 +40,11 @@ suite('entries routes', addDatabaseHooks(() => {
           {
             id: 1,
             userId: 1,
-            date: '2017-06-28T00:00:00.000Z',
+            date: '6/28/2017',
             location: 'home',
             yogaType: 'vinyasa',
-            startTime: '13:00:00',
-            endTime: '13:30:00',
+            startTime: '1:00 PM',
+            endTime: '1:30 PM',
             duration: {
               minutes: 30,
             },
@@ -54,11 +53,11 @@ suite('entries routes', addDatabaseHooks(() => {
           {
             id: 2,
             userId: 1,
-            date: '2017-07-14T00:00:00.000Z',
+            date: '7/14/2017',
             location: 'studio',
             yogaType: 'vinyasa',
-            startTime: '12:00:00',
-            endTime: '13:30:00',
+            startTime: '12:00 PM',
+            endTime: '1:30 PM',
             duration: {
               hours: 1,
               minutes: 30,
@@ -94,8 +93,8 @@ suite('entries routes', addDatabaseHooks(() => {
           date: '2017-08-14T00:00:00.000Z',
           location: 'home',
           yogaType: 'ashtanga',
-          startTime: '13:00:00',
-          endTime: '14:30:00',
+          startTime: '2017-08-14T13:00:00.000Z',
+          endTime: '2017-08-14T14:30:00.000Z',
           duration: {
             hours: 1,
             minutes: 30,
@@ -124,8 +123,8 @@ suite('entries routes', addDatabaseHooks(() => {
           date: '2017-06-28T00:00:00.000Z',
           location: 'home',
           yogaType: 'hatha',
-          startTime: '13:00:00',
-          endTime: '13:30:00',
+          startTime: '2017-06-28T13:00:00.000Z',
+          endTime: '2017-06-28T13:30:00.000Z',
           duration: {
             minutes: 30,
           },

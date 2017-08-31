@@ -63,6 +63,23 @@ router.post('/login', verifyLoginCredentials, (req, res) => {
     });
 });
 
+// app.post('/refresh_token', function (req, res) {
+//   // verify the existing token
+//   var profile = jwt.verify(req.body.token, process.env.JWT_KEY);
+//
+//   // if more than 14 days old, force login
+//   if (profile.original_iat - new Date() > 14) { // iat == issued at
+//     return res.send(401); // re-logging
+//   }
+//
+//   // check if the user still exists or if authorization hasn't been revoked
+//   if (!valid) return res.send(401); // re-logging
+//
+//   // issue a new token
+//   var refreshed_token = jwt.sign(profile, secret, { expiresInMinutes: 60*5 });
+//   res.json({ token: refreshed_token });
+// });
+
 router.post('/register', (req, res) => {
   UserRepository.verifyUniqueEmail(req.body.email)
     .then((userData) => {

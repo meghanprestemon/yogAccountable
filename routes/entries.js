@@ -8,7 +8,6 @@ const { camelizeKeys, decamelizeKeys } = require('humps');
 const router = express.Router();
 
 function verifyToken(req, res, next) {
-  console.log('here - find cookies', req.cookies);
   jwt.verify(req.cookies.token, process.env.JWT_KEY, (err, decoded) => {
     if (decoded) {
       next();
@@ -19,21 +18,32 @@ function verifyToken(req, res, next) {
 }
 
 function getUserId(req) {
-  console.log('step 2', req.cookies);
   const decodedToken = jwt.decode(req.cookies.token, { complete: true });
   return decodedToken.payload.sub.id;
 }
 
+function formatEntryData(entriesResponse) {
+  let entryData = entriesResponse.map(entry => {
+    entry.date = entry.date.toLocaleDateString('en-US');
+    entry.startTime = entry.startTime.toLocaleTimeString('en-US', {hour: '2-digit', minute:'2-digit'});
+    entry.endTime = entry.endTime.toLocaleTimeString('en-US', {hour: '2-digit', minute:'2-digit'});
+    return entry;
+  })
+  return entryData;
+}
+
 router.get('/', verifyToken, (req, res) => {
-  console.log('here - getting entries');
   const userId = getUserId(req);
   if (!userId) {
     return res.status(401).send({ field: 'userId', error: 'unauthorized' });
   }
 
   EntriesRepository.getAllEntries(userId)
+    .then((entriesResponse) => {
+      return formatEntryData(camelizeKeys(entriesResponse))
+    })
     .then((entryData) => {
-      res.status(200).send(camelizeKeys(entryData));
+      res.status(200).send(entryData);
     })
     .catch((err) => {
       res.setHeader('Content-Type', 'application/json');
