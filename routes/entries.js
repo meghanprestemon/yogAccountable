@@ -56,8 +56,9 @@ router.post('/', verifyToken, (req, res) => {
   }
 
   EntriesRepository.createEntry(userId, decamelizeKeys(req.body))
-    .then((entry) => {
-      res.status(200).send(camelizeKeys(entry[0]));
+    .then(entry => formatEntryData(camelizeKeys(entry)))
+    .then((entryData) => {
+      res.status(200).send(entryData[0]);
     })
     .catch((err) => {
       res.setHeader('Content-Type', 'application/json');
